@@ -1,0 +1,253 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import earthAnimation from '../assets/earth-placeholder.png';
+---
+  
+<Layout title="Главная">
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>PACE in the Classroom: Exploring our world with satellite data</h1>
+        <p>Learn how the PACE satellite is helping us study our planet's oceans, atmosphere, and climate.</p>
+        <a href="/about" class="btn">Read more</a>
+      </div>
+      <div class="earth-image-wrapper">
+        <div class="earth-image">
+          <Image src={earthAnimation} alt="Анимация Земли" width={600} height={600} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features">
+    <h2>What you'll find on our website</h2>
+    <div class="feature-grid">
+      <div class="feature-item">
+        <h3>Information about PACE</h3>
+        <p>Learn all about the mission of the PACE satellite and its importance to Earth science.</p>
+      </div>
+      <div class="feature-item">
+        <h3>Interactive map</h3>
+        <p>Explore PACE data on an interactive map of the world.</p>
+      </div>
+      <div class="feature-item">
+        <h3>Educational Resources</h3>
+        <p>Access to lessons, assignments and projects for students.</p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Глобальные Стили */
+  * {
+    box-sizing: border-box; /* Включаем border-box для всех элементов */
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --hero-gradient: linear-gradient(135deg, #2a5298, #6fa3ef);
+    --primary-color: #ff6b6b;
+    --secondary-color: #0077b6;
+    --background-muted: #f0f4f8;
+    --feature-title-color: #2a5298;
+    --feature-description-color: #555555;
+    --feature-background: #ffffff;
+    --feature-hover-background: #f9f9f9;
+    --feature-shadow: rgba(0, 0, 0, 0.1);
+    --feature-hover-shadow: rgba(0, 0, 0, 0.15);
+  }
+
+  body {
+    font-family: 'Helvetica Neue', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #ffffff;
+  }
+
+  /* Секция Героя */
+  .hero {
+    padding: 6rem 2rem;
+    background: var(--hero-gradient);
+    color: white;
+    border-radius: 20px;
+    margin-bottom: 4rem;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem; /* Увеличенный разрыв между элементами */
+  }
+
+  .hero-text {
+    max-width: 600px;
+    padding-left: 2rem; /* Увеличен отступ слева */
+    padding-right: 2rem; /* Увеличен отступ справа */
+  }
+
+  h1 {
+    font-size: 4.2rem;
+    color: #ffffff;
+    margin-bottom: 2rem;
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .hero p {
+    font-size: 1.8rem;
+    max-width: 600px;
+    margin-bottom: 3.5rem;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+  }
+
+  .earth-image-wrapper {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    overflow: hidden; /* Предотвращает выход изображения за границы */
+  }
+
+  .earth-image {
+    transition: transform 0.3s ease;
+    animation: rotateEarth 60s linear infinite; /* Увеличена продолжительность анимации до 60 секунд */
+  }
+
+  .earth-image:hover {
+    transform: scale(1.05);
+  }
+
+  .btn {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 2rem 3.5rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  .btn:hover {
+    background-color: #ff4757;
+    transform: translateY(-7px);
+  }
+
+  /* Секция Функций */
+  .features {
+    padding: 8rem 2rem 5rem;
+    background-color: var(--background-muted);
+    border-radius: 20px;
+    position: relative;
+    margin-top: 4rem;
+  }
+
+  .features h2 {
+    text-align: center;
+    font-size: 3rem;
+    color: var(--secondary-color);
+    margin-bottom: 4rem;
+    position: relative;
+  }
+
+  .features h2::after {
+    content: '';
+    width: 100px;
+    height: 4px;
+    background-color: var(--primary-color);
+    display: block;
+    margin: 1rem auto 0;
+    border-radius: 2px;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 3rem;
+    justify-items: center;
+  }
+
+  .feature-item {
+    background-color: var(--feature-background);
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 20px var(--feature-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .feature-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 24px var(--feature-hover-shadow);
+    background-color: var(--feature-hover-background);
+  }
+
+  .feature-item h3 {
+    color: var(--feature-title-color);
+    margin-bottom: 1.5rem;
+    font-size: 2.4rem;
+  }
+
+  .feature-item p {
+    color: var(--feature-description-color);
+    line-height: 1.8;
+    font-size: 1.6rem;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes rotateEarth {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .hero, .features, .feature-item, .btn {
+    animation: fadeIn 1.5s ease-in-out;
+  }
+
+  /* Медиа-запросы для Мобильных Устройств */
+  @media (max-width: 768px) {
+    .hero-content {
+      flex-direction: column;
+    }
+
+    h1 {
+      font-size: 3rem;
+    }
+
+    .hero p {
+      font-size: 1.3rem;
+    }
+
+    .btn {
+      padding: 1.2rem 2.5rem;
+    }
+
+    .feature-item {
+      padding: 2.5rem;
+    }
+
+    .features h2 {
+      font-size: 2.5rem;
+    }
+  }
+</style>

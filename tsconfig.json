@@ -1,0 +1,12 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "strictNullChecks": false,
+    "allowJs": true,
+    "checkJs": false,
+    "noImplicitAny": false,
+    "types": ["@types/leaflet"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

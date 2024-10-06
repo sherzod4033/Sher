@@ -1,0 +1,83 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+  
+<Layout title="Анализ данных PACE">
+  <h1>Analyzing PACE data</h1>
+  
+  <section class="data-analysis-container">
+    
+    <!-- Ссылка вместо iframe -->
+    <a href="https://worldview.earthdata.nasa.gov/" target="_blank" rel="noopener noreferrer" class="btn">
+      Open Worldview Earthdata
+    </a>
+  </section>
+  </section>
+
+</Layout>
+
+<style>
+  .data-analysis-container {
+    margin-bottom: 2rem;
+  }
+
+  .data-controls {
+    background-color: var(--color-muted);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
+
+  .control-group {
+    margin-bottom: 1rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  select, input[type="date"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .btn {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn:hover {
+    background-color: var(--color-secondary);
+  }
+
+  .data-explanation ul {
+    padding-left: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .data-controls {
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+
+    .control-group {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    .btn {
+      align-self: flex-end;
+    }
+  }
+</style>

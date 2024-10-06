@@ -1,0 +1,645 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import lessonImage from '../assets/classroom.jpg';
+---
+
+<Layout title="Образовательные материалы">
+  <h1>Educational materials</h1>
+
+  <section class="intro">
+    <!-- Увеличенный размер изображения и добавленная анимация -->
+    <Image
+      src={lessonImage}
+      alt="Класс, изучающий данные PACE"
+      width={1100}
+      height={500}
+      class="animated-image"
+    />
+    <p>Welcome to the PACE in the Classroom educational materials section! Here you will find resources for teachers and students to help integrate PACE data into the classroom and deepen understanding of Earth's ecology.</p>
+  </section>
+
+  <section class="lesson-plans">
+    <h2>Lessons</h2>
+    <div class="lesson-grid">
+      <div class="lesson-card">
+        <h3>Build your own PACE</h3>
+        <p>Construct a paper model replica of PACE!</p>
+        <a href="https://pace.oceansciences.org/paper_model.htm" class="btn" download>View</a>
+      </div>
+      <div class="lesson-card">
+        <h3>Get into Shapes with PACE</h3>
+        <p>A Card Matching Game</p>
+        <a href="https://pace.oceansciences.org/match.htm" class="btn" download>Play Game</a>
+      </div>
+      <div class="lesson-card">
+        <h3>Shedding Light on PACE</h3>
+        <p>Explore properties of light and color in the ocean/atmosphere</p>
+        <a href="https://pace.oceansciences.org/whatispace_main.htm" class="btn" download>View</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="activities">
+    <h2>Interactive tasks</h2>
+    <ul>
+      <li>
+        <h3>PACE data game</h3>
+        <p>Learn to interpret PACE satellite data with this interactive assignment.</p>
+        <a href="https://6702773f4c7e413d0f2c9df3--guileless-salmiakki-33b07b.netlify.app/" class="btn">Start game</a>
+      </li>
+    </ul>
+  </section>
+  <section class="quiz aerosols-quiz">
+    <h2>What in the World are Aerosols?</h2>
+    <p>Answer four questions to discover your aerosol personality!</p>
+    <button class="btn" id="startAerosolQuizBtn">Take the Quiz</button>
+
+    <!-- Modal Window for Aerosol Quiz -->
+    <div id="aerosolQuizModal" class="modal">
+      <div class="modal-content">
+        <span class="close-button" id="closeAerosolQuizBtn">&times;</span>
+        <h3>Take the Quiz: "What in the World are Aerosols?"</h3>
+        
+        <!-- Progress Bar -->
+        <div class="progress-container">
+          <div class="progress-bar" id="aerosolProgressBar"></div>
+        </div>
+        
+        <form id="aerosolQuizForm">
+          <!-- Questions will be dynamically displayed here -->
+          <div class="question" data-question="1">
+            <label>1. How do you prefer to spend your weekend?</label>
+            <div class="options">
+              <label><input type="radio" name="aq1" value="A"> Exploring the outdoors</label>
+              <label><input type="radio" name="aq1" value="B"> Relaxing at home</label>
+              <label><input type="radio" name="aq1" value="C"> Attending social events</label>
+              <label><input type="radio" name="aq1" value="D"> Learning something new</label>
+            </div>
+          </div>
+          <div class="question" data-question="2" style="display:none;">
+            <label>2. What type of weather do you enjoy the most?</label>
+            <div class="options">
+              <label><input type="radio" name="aq2" value="A"> Sunny and clear</label>
+              <label><input type="radio" name="aq2" value="B"> Rainy and cozy</label>
+              <label><input type="radio" name="aq2" value="C"> Windy and dynamic</label>
+              <label><input type="radio" name="aq2" value="D"> Snowy and quiet</label>
+            </div>
+          </div>
+          <div class="question" data-question="3" style="display:none;">
+            <label>3. Which activity appeals to you the most?</label>
+            <div class="options">
+              <label><input type="radio" name="aq3" value="A"> Hiking or biking</label>
+              <label><input type="radio" name="aq3" value="B"> Reading a book</label>
+              <label><input type="radio" name="aq3" value="C"> Partying with friends</label>
+              <label><input type="radio" name="aq3" value="D"> Attending a workshop</label>
+            </div>
+          </div>
+          <div class="question" data-question="4" style="display:none;">
+            <label>4. What is your favorite type of music?</label>
+            <div class="options">
+              <label><input type="radio" name="aq4" value="A"> Upbeat and energetic</label>
+              <label><input type="radio" name="aq4" value="B"> Soft and melodic</label>
+              <label><input type="radio" name="aq4" value="C"> Dance and electronic</label>
+              <label><input type="radio" name="aq4" value="D"> Diverse and eclectic</label>
+            </div>
+          </div>
+          <!-- Navigation Buttons -->
+          <div class="navigation-buttons">
+            <button type="button" id="aqPrevBtn" class="btn secondary-btn" style="display:none;">Back</button>
+            <button type="button" id="aqNextBtn" class="btn">Next</button>
+            <button type="button" id="aqSubmitBtn" class="btn" style="display:none;">Submit</button>
+          </div>
+        </form>
+        <!-- Result Container -->
+        <div id="aqResult" style="display:none; margin-top:20px;">
+          <h3>Your Aerosol Type:</h3>
+          <p id="aqResultText"></p>
+        </div>
+      </div>
+    </div>
+
+    <div id="aerosolOverlay" class="overlay"></div>
+
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Elements for Aerosol Quiz
+        const startAerosolQuizBtn = document.getElementById('startAerosolQuizBtn');
+        const aerosolQuizModal = document.getElementById('aerosolQuizModal');
+        const aerosolOverlay = document.getElementById('aerosolOverlay');
+        const closeAerosolQuizBtn = document.getElementById('closeAerosolQuizBtn');
+        const aqPrevBtn = document.getElementById('aqPrevBtn');
+        const aqNextBtn = document.getElementById('aqNextBtn');
+        const aqSubmitBtn = document.getElementById('aqSubmitBtn');
+        const aqResultContainer = document.getElementById('aqResult');
+        const aqResultText = document.getElementById('aqResultText');
+        const aqQuestions = document.querySelectorAll('.aerosols-quiz .question');
+        const aqProgressBar = document.getElementById('aerosolProgressBar');
+        let aqCurrentQuestion = 0;
+
+        // Object to store answers
+        const aqAnswers = {
+          aq1: null,
+          aq2: null,
+          aq3: null,
+          aq4: null
+        };
+
+        // Function to open Aerosol Quiz Modal
+        function openAerosolQuizModal() {
+          aerosolQuizModal.style.display = 'block';
+          aerosolOverlay.style.display = 'block';
+          showAerosolQuestion(aqCurrentQuestion);
+          updateAerosolProgressBar();
+        }
+
+        // Function to close Aerosol Quiz Modal
+        function closeAerosolQuizModal() {
+          aerosolQuizModal.style.display = 'none';
+          aerosolOverlay.style.display = 'none';
+          resetAerosolQuiz();
+        }
+
+        // Function to display current Aerosol question
+        function showAerosolQuestion(index) {
+          aqQuestions.forEach((q, i) => {
+            q.style.display = (i === index) ? 'block' : 'none';
+          });
+
+          // Manage visibility of buttons
+          if (index === 0) {
+            aqPrevBtn.style.display = 'none';
+          } else {
+            aqPrevBtn.style.display = 'inline-block';
+          }
+
+          if (index === aqQuestions.length - 1) {
+            aqNextBtn.style.display = 'none';
+            aqSubmitBtn.style.display = 'inline-block';
+          } else {
+            aqNextBtn.style.display = 'inline-block';
+            aqSubmitBtn.style.display = 'none';
+          }
+
+          updateAerosolProgressBar();
+        }
+
+        // Function to reset Aerosol Quiz
+        function resetAerosolQuiz() {
+          aqCurrentQuestion = 0;
+          aqQuestions.forEach(q => {
+            const inputs = q.querySelectorAll('input[type="radio"]');
+            inputs.forEach(input => input.checked = false);
+            q.style.display = 'none';
+          });
+          aqResultContainer.style.display = 'none';
+          aqResultText.textContent = '';
+          document.querySelector('.aerosols-quiz .navigation-buttons').style.display = 'block';
+          updateAerosolProgressBar();
+          showAerosolQuestion(aqCurrentQuestion);
+        }
+
+        // Function to update Aerosol progress bar
+        function updateAerosolProgressBar() {
+          const progressPercentage = ((aqCurrentQuestion) / aqQuestions.length) * 100;
+          aqProgressBar.style.width = `${progressPercentage}%`;
+        }
+
+        // Event Listener for "Take the Quiz" button
+        startAerosolQuizBtn.addEventListener('click', openAerosolQuizModal);
+
+        // Event Listeners for closing the modal
+        closeAerosolQuizBtn.addEventListener('click', closeAerosolQuizModal);
+        aerosolOverlay.addEventListener('click', closeAerosolQuizModal);
+
+        // Event Listener for "Next" button
+        aqNextBtn.addEventListener('click', function() {
+          const currentQ = aqQuestions[aqCurrentQuestion];
+          const selected = currentQ.querySelector('input[name="aq' + (aqCurrentQuestion + 1) + '"]:checked');
+          if (selected) {
+            aqAnswers['aq' + (aqCurrentQuestion + 1)] = selected.value;
+            aqCurrentQuestion++;
+            showAerosolQuestion(aqCurrentQuestion);
+          } else {
+            alert('Please select an answer before proceeding to the next question.');
+          }
+        });
+
+        // Event Listener for "Back" button
+        aqPrevBtn.addEventListener('click', function() {
+          if (aqCurrentQuestion > 0) {
+            aqCurrentQuestion--;
+            showAerosolQuestion(aqCurrentQuestion);
+          }
+        });
+
+        // Function to calculate Aerosol result
+        function calculateAerosolResult() {
+          // Example simple logic to determine aerosol type
+          const scores = {
+            sulfates: 0,
+            nitrates: 0,
+            organicCarbon: 0,
+            blackCarbon: 0
+          };
+
+          // Example distribution of answers to types
+          if (aqAnswers.aq1 === 'A') scores.sulfates += 1;
+          if (aqAnswers.aq1 === 'B') scores.nitrates += 1;
+          if (aqAnswers.aq1 === 'C') scores.blackCarbon += 1;
+          if (aqAnswers.aq1 === 'D') scores.organicCarbon += 1;
+
+          if (aqAnswers.aq2 === 'A') scores.sulfates += 1;
+          if (aqAnswers.aq2 === 'B') scores.nitrates += 1;
+          if (aqAnswers.aq2 === 'C') scores.blackCarbon += 1;
+          if (aqAnswers.aq2 === 'D') scores.organicCarbon += 1;
+
+          if (aqAnswers.aq3 === 'A') scores.sulfates += 1;
+          if (aqAnswers.aq3 === 'B') scores.nitrates += 1;
+          if (aqAnswers.aq3 === 'C') scores.blackCarbon += 1;
+          if (aqAnswers.aq3 === 'D') scores.organicCarbon += 1;
+
+          if (aqAnswers.aq4 === 'A') scores.blackCarbon += 1;
+          if (aqAnswers.aq4 === 'B') scores.nitrates += 1;
+          if (aqAnswers.aq4 === 'C') scores.organicCarbon += 1;
+          if (aqAnswers.aq4 === 'D') scores.sulfates += 1;
+
+          // Determine type with highest score
+          let maxScore = 0;
+          let resultType = '';
+          for (const type in scores) {
+            if (scores[type] > maxScore) {
+              maxScore = scores[type];
+              resultType = type;
+            }
+          }
+
+          // Mapping of aerosol types
+          const aerosolTypes = {
+            sulfates: {
+              name: 'Sulfates',
+              description: 'Sulfates are tiny particles formed from sulfur dioxide emissions. They can reflect sunlight and contribute to cooling the Earth’s surface but also play a role in acid rain formation.',
+              image: 'assets/sulfates.jpg' // Add the appropriate image path
+            },
+            nitrates: {
+              name: 'Nitrates',
+              description: 'Nitrates originate from nitrogen oxides in the atmosphere. They contribute to smog formation and can impact human health and ecosystems negatively.',
+              image: 'assets/nitrates.jpg' // Add the appropriate image path
+            },
+            organicCarbon: {
+              name: 'Organic Carbon',
+              description: 'Organic carbon aerosols are derived from natural sources like vegetation or human activities such as burning fossil fuels. They influence climate by absorbing and scattering sunlight.',
+              image: 'assets/organic_carbon.jpg' // Add the appropriate image path
+            },
+            blackCarbon: {
+              name: 'Black Carbon',
+              description: 'Black carbon is a component of soot, produced from incomplete combustion of fossil fuels, biofuel, and biomass. It strongly absorbs sunlight and contributes to global warming.',
+              image: 'assets/black_carbon.jpg' // Add the appropriate image path
+            }
+          };
+
+          return aerosolTypes[resultType] || { name: 'Unknown Type', description: 'Unable to determine your aerosol type.', image: '' };
+        }
+
+        // Event Listener for "Submit" button
+        aqSubmitBtn.addEventListener('click', function() {
+          // Save current answer before submission
+          const currentQ = aqQuestions[aqCurrentQuestion];
+          const selected = currentQ.querySelector('input[name="aq' + (aqCurrentQuestion + 1) + '"]:checked');
+          if (selected) {
+            aqAnswers['aq' + (aqCurrentQuestion + 1)] = selected.value;
+          }
+
+          // Check all questions are answered
+          for (let i = 1; i <= 4; i++) {
+            if (!aqAnswers['aq' + i]) {
+              alert('Please answer all questions before submitting.');
+              return;
+            }
+          }
+
+          const result = calculateAerosolResult();
+
+          // Display the result
+          aqResultText.innerHTML = `<strong>${result.name}</strong>: ${result.description}`;
+          
+          if (result.image) {
+            aqResultText.innerHTML += `<br><img src="${result.image}" alt="${result.name}" style="width:100%; height:auto; border-radius:8px; margin-top:10px;">`;
+          }
+
+          aqResultContainer.style.display = 'block';
+
+          // Hide navigation buttons after submission
+          document.querySelector('.aerosols-quiz .navigation-buttons').style.display = 'none';
+          aqProgressBar.style.width = `100%`;
+        });
+      });
+    </script>
+</section>
+
+ 
+<style>
+  :root {
+    --color-primary: #0077cc;
+    --color-secondary: #005fa3;
+    --color-muted: #f4f4f4;
+    --color-background: #ffffff;
+    --color-text: #333333;
+    --color-border: #dddddd;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-family);
+    color: var(--color-text);
+    background-color: var(--color-muted);
+  }
+
+  .intro {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  /* Обновлённые стили для изображения */
+  .intro img {
+    width: 100%;
+    max-width: 1100px; /* Увеличено с 800px до 1000px */
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 1rem;
+    animation: fadeInScale 1s ease forwards; /* Добавлена анимация */
+    transform: scale(0.95); /* Начальное состояние для анимации */
+    transition: transform 0.3s ease;
+  }
+
+  /* Эффект при наведении курсора */
+  .intro img:hover {
+    transform: scale(1.05); /* Увеличение при наведении */
+  }
+
+  /* Ключевые кадры для анимации появления */
+  @keyframes fadeInScale {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .lesson-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .lesson-card {
+    background-color: var(--color-background);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .lesson-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .activities ul, .resources ul, .quiz ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .activities li, .resources li, .quiz li {
+    margin-bottom: 1.5rem;
+  }
+
+  .btn {
+    display: inline-block;
+    background-color: var(--color-primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .btn:hover {
+    background-color: var(--color-secondary);
+    transform: translateY(-2px);
+  }
+
+  .secondary-btn {
+    background-color: #6c757d;
+  }
+
+  .secondary-btn:hover {
+    background-color: #5a6268;
+  }
+
+  @media (max-width: 768px) {
+    .lesson-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Стили для модального окна */
+  .modal {
+    display: none; /* Скрыто по умолчанию */
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5); /* Черный фон с прозрачностью */
+    transition: opacity 0.3s ease;
+  }
+
+  .modal-content {
+    background-color: var(--color-background);
+    margin: 5% auto; /* 5% сверху и по центру */
+    padding: 2rem;
+    border: 1px solid var(--color-border);
+    width: 90%;
+    max-width: 600px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    animation: slideDown 0.5s ease;
+  }
+
+  .close-button {
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .close-button:hover,
+  .close-button:focus {
+    color: #000;
+    text-decoration: none;
+  }
+
+  .navigation-buttons {
+    margin-top: 2rem;
+    text-align: right;
+  }
+
+  .navigation-buttons button {
+    margin-left: 10px;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--color-primary);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-weight: 500;
+  }
+
+  .navigation-buttons button:hover {
+    background-color: var(--color-secondary);
+    transform: translateY(-2px);
+  }
+
+  .navigation-buttons .secondary-btn {
+    background-color: #6c757d;
+  }
+
+  .navigation-buttons .secondary-btn:hover {
+    background-color: #5a6268;
+  }
+
+  .progress-container {
+    width: 100%;
+    background-color: var(--color-muted);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+  }
+
+  .progress-bar {
+    height: 10px;
+    width: 0%;
+    background-color: var(--color-primary);
+    transition: width 0.3s ease;
+  }
+
+  .question {
+    margin-bottom: 1.5rem;
+  }
+
+  .question label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .options label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+    background-color: var(--color-muted);
+  }
+
+  .options input[type="radio"] {
+    accent-color: var(--color-primary);
+  }
+
+  .options label:hover {
+    background-color: #e9f5ff;
+    border-color: var(--color-primary);
+  }
+
+  .options input[type="radio"]:checked + label {
+    background-color: #d0e8ff;
+    border-color: var(--color-primary);
+  }
+
+  #result {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: #e0f7fa;
+    border-left: 5px solid var(--color-primary);
+    border-radius: 8px;
+    animation: fadeIn 0.5s ease;
+  }
+
+  #result h3 {
+    margin-bottom: 1rem;
+    color: var(--color-primary);
+  }
+
+  #result img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* Новая анимация для изображения */
+  @keyframes fadeInScale {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .modal-content {
+      width: 95%;
+      padding: 1rem;
+    }
+
+    .navigation-buttons button {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .navigation-buttons .secondary-btn {
+      margin-left: 0;
+    }
+  }
+</style>
+</Layout>

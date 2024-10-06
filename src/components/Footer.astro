@@ -1,0 +1,97 @@
+---
+// src/components/Footer.astro
+---
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>About the project</h3>
+      <p>PACE in the Classroom is an educational resource about the PACE satellite mission and the study of Earth's ecology.</p>
+    </div>
+    <div class="footer-section">
+      <h3>Ссылки</h3>
+      <ul>
+        <li><a href="/">Main</a></li>
+        <li><a href="/about">About the PACE satellite</a></li>
+        <li><a href="/map">Interactive map</a></li>
+        <li><a href="/education">Educational materials</a></li>
+        <li><a href="/contact">Contacts</a></li>
+        <li><a href="/phytoplankton">Game Evolution of Phytoplankton</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h3>Contacts</h3>
+      <p>Email: info@paceintheclassroom.org</p>
+      <p>Phone: +1 (123) 456-7890</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2023 PACE in the Classroom. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    background-color: #f5f5f5;
+    color: #333;
+    padding: 2rem 0 1rem;
+  }
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .footer-section {
+    flex: 1;
+    margin-right: 2rem;
+  }
+
+  .footer-section:last-child {
+    margin-right: 0;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  a {
+    color: #333;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .footer-bottom {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+  }
+
+  @media (max-width: 768px) {
+    .footer-content {
+      flex-direction: column;
+    }
+
+    .footer-section {
+      margin-right: 0;
+      margin-bottom: 2rem;
+    }
+  }
+</style>

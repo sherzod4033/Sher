@@ -1,0 +1,137 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Contacts">
+  <h1>Contact Us</h1>
+
+  <section class="contact-info">
+    <p>If you have any questions about the PACE in the Classroom project or want to learn more about how to use our resources, please contact us:</p>
+    <ul>
+      <li>Email: <a href="mailto:info@paceintheclassroom.org">info@paceintheclassroom.org</a></li>
+      <li>Phone: +1 (123) 456-7890</li>
+      <li>Address: NASA Goddard Space Flight Center, 8800 Greenbelt Rd, Greenbelt, MD 20771, USA</li>
+    </ul>
+  </section>
+
+  <section class="contact-form">
+    <h2>Feedback Form</h2>
+    <form id="feedback-form">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" required>
+      </div>
+      <div class="form-group">
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+      </div>
+      <button type="submit" class="btn">Send</button>
+    </form>
+  </section>
+
+  <section class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <details>
+      <summary>How can I use the PACE in the Classroom materials in my class?</summary>
+      <p>Our materials are designed for easy integration into the curriculum. You can use lesson plans, interactive activities, and resources available on our website. If you need additional assistance, feel free to contact us.</p>
+    </details>
+    <details>
+      <summary>Can I access raw PACE data for research projects?</summary>
+      <p>Yes, raw PACE data will be available through the official NASA website after the satellite launch. We provide processed and interpreted data suitable for educational purposes.</p>
+    </details>
+    <details>
+      <summary>Do you conduct training workshops for teachers?</summary>
+      <p>Yes, we regularly conduct online and offline workshops for teachers. Stay updated on our website or subscribe to our newsletter to receive information about upcoming events.</p>
+    </details>
+  </section>
+</Layout>
+
+
+<style>
+  .contact-info ul {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .contact-info li {
+    margin-bottom: 0.5rem;
+  }
+
+  .contact-form {
+    margin-top: 2rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+
+  .btn {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn:hover {
+    background-color: var(--color-secondary);
+  }
+
+  .faq {
+    margin-top: 2rem;
+  }
+
+  details {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background-color: var(--color-muted);
+    border-radius: 4px;
+  }
+
+  summary {
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  details p {
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .contact-form form {
+      max-width: 600px;
+    }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('feedback-form');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // Здесь будет логика отправки формы
+    alert('Спасибо за ваше сообщение! Мы свяжемся с вами в ближайшее время.');
+    (form as HTMLFormElement).reset();
+  });
+</script>

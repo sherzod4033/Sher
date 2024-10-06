@@ -1,0 +1,101 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import paceSatellite from '../assets/pace-satellite.jpg';
+---
+
+<Layout title="About the PACE Satellite">
+  <h1>About the PACE Satellite</h1>
+  
+  <section class="pace-info">
+    <Image src={paceSatellite} alt="PACE Satellite" width={600} height={400} />
+    <div class="info-text">
+      <h2>PACE Mission</h2>
+      <p>PACE (Plankton, Aerosol, Cloud, ocean Ecosystem) is a NASA satellite mission aimed at studying the interactions between the atmosphere and the ocean. The satellite launch is scheduled for 2024.</p>
+      <h3>Primary Mission Goals:</h3>
+      <ul>
+        <li>Studying phytoplankton and its role in the global carbon cycle</li>
+        <li>Investigating aerosols and their impact on climate</li>
+        <li>Observing clouds and their interactions with aerosols</li>
+        <li>Monitoring the health of oceans and water quality</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="data-collection">
+    <h2>How PACE Collects Data</h2>
+    <p>The PACE satellite is equipped with advanced instruments for data collection:</p>
+    <ul>
+      <li><strong>Ocean Color Instrument (OCI):</strong> A hyperspectral radiometer for measuring ocean color</li>
+      <li><strong>Multi-angle Polarimeters:</strong> Two polarimeters for studying aerosols and clouds</li>
+    </ul>
+    <div class="video-container">
+      <iframe 
+        width="560" 
+        height="315" 
+        src="https://www.youtube.com/embed/Q-eBqDJ0Mbs?si=vRJX9epsHFV5-wRw" 
+        title="PACE Satellite Operation Animation" 
+        style="border: none;"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen
+      ></iframe>
+    </div>
+  </section>
+
+  <section class="impact">
+    <h2>Significance for Climate Change Studies</h2>
+    <p>PACE data will help scientists better understand:</p>
+    <ul>
+      <li>The role of oceans in the global carbon cycle</li>
+      <li>The impact of aerosols on cloud formation and climate</li>
+      <li>Changes in marine ecosystems and their consequences for the climate</li>
+    </ul>
+  </section>
+</Layout>
+
+<style>
+  .pace-info {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .info-text {
+    flex: 1;
+  }
+
+  .data-collection, .impact {
+    margin-bottom: 2rem;
+  }
+
+  ul {
+    padding-left: 1.5rem;
+  }
+
+  .video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+  }
+
+  .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 768px) {
+    .pace-info {
+      flex-direction: column;
+    }
+
+    .pace-info img {
+      width: 100%;
+      height: auto;
+    }
+  }
+</style>

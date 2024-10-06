@@ -1,0 +1,216 @@
+---
+---
+<header>
+  <nav>
+    <div class="logo">
+      <a href="/">
+        <img src="/logo.png" alt="PACE in the Classroom Logo" />
+      </a>
+    </div>
+    
+    <ul class="nav-links">
+      <li><a href="/">Main</a></li>
+      <li><a href="/about">About the PACE satellite</a></li>
+      <li><a href="/map">Interactive map</a></li>
+      <li><a href="/education">Educational materials</a></li>
+      <li><a href="/contact">Contacts</a></li>
+      <li><a href="/phytoplankton">Game Evolution of Phytoplankton</a></li>
+    </ul>
+    
+    <!-- LanguageSwitcher component removed -->
+    
+    <!-- Добавляем кнопку гамбургера для мобильного меню -->
+    <button class="hamburger" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+    
+  </nav>
+</header>
+
+<style>
+  /* Импорт Google Fonts для улучшенной типографики */
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+  /* Базовые стили */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f9fafb;
+    color: #333;
+  }
+
+  header {
+    background: linear-gradient(135deg, #eceff1, #ffffff);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column; /* Изменено для вертикального центрирования на малых экранах */
+    align-items: center;    /* Центрирование по горизонтали */
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+  }
+
+  /* Стилевые изменения для горизонтального размещения на больших экранах */
+  @media (min-width: 769px) {
+    nav {
+      flex-direction: row; /* Горизонтальное расположение */
+      justify-content: center; /* Центрирование содержимого */
+      align-items: center;
+      gap: 2rem; /* Расстояние между элементами */
+    }
+  }
+
+  /* Стили для логотипа */
+  .logo img {
+    height: 90px;
+    transition: transform 0.3s ease;
+  }
+
+  .logo img:hover {
+    transform: scale(1.05);
+  }
+
+  /* Навигационные ссылки */
+  .nav-links {
+    display: flex;
+    list-style-type: none;
+    gap: 2rem;
+    flex-wrap: wrap; /* Позволяет ссылкам переноситься на новую строку при необходимости */
+    justify-content: center;
+    margin: 1rem 0; /* Отступы для вертикального центрирования на малых экранах */
+  }
+
+  .nav-links a {
+    color: #555;
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    padding: 0.5rem 0;
+    transition: color 0.3s ease;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: #1a73e8;
+    transition: width 0.3s ease;
+  }
+
+  .nav-links a:hover {
+    color: #1a73e8;
+  }
+
+  .nav-links a:hover::after {
+    width: 100%;
+  }
+
+  /* Кнопка гамбургера */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 25px;
+    height: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1100;
+    margin-top: 1rem; /* Отступ сверху для мобильных экранов */
+  }
+
+  .hamburger:focus {
+    outline: none;
+  }
+
+  .hamburger-line {
+    width: 100%;
+    height: 3px;
+    background-color: #555;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .hamburger.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+    background-color: #1a73e8;
+  }
+
+  .hamburger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+    background-color: #1a73e8;
+  }
+
+  /* Адаптивные стили */
+  @media (max-width: 768px) {
+    .nav-links {
+      position: absolute;
+      top: 100%; /* Расположение под заголовком */
+      left: 0;
+      right: 0;
+      background-color: #ffffff;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 2rem 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .nav-links.open {
+      max-height: 500px; /* Достаточно большое значение для отображения меню */
+    }
+
+    .hamburger {
+      display: flex;
+      margin-top: 0; /* Убираем отступ сверху при активном расположении */
+    }
+  }
+
+  /* Поведение скролла */
+  html {
+    scroll-behavior: smooth;
+  }
+
+</style>
+
+<script>
+  // Переключение навигации на мобильных устройствах
+  document.addEventListener('DOMContentLoaded', () => {
+    const hamburger = document.querySelector('.hamburger');
+    const navLinks = document.querySelector('.nav-links');
+
+    hamburger.addEventListener('click', () => {
+      const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+      hamburger.setAttribute('aria-expanded', (!isExpanded).toString());
+      hamburger.classList.toggle('active');
+      navLinks.classList.toggle('open');
+    });
+  });
+</script>

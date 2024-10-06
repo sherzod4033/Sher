@@ -1,0 +1,478 @@
+<html><head><base href="https://evolution-of-phytoplankton.ocean" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evolution of Phytoplankton: Advanced Ecosystem</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #001f3f;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+  #game-container {
+    background-color: #003366;
+    border-radius: 15px;
+    padding: 30px;
+    margin-top: 20px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    max-width: 1000px;
+    width: 95%;
+  }
+  h1 {
+    text-align: center;
+    color: #00ffff;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+  }
+  #ocean {
+    width: 100%;
+    height: 500px;
+    background-color: #0066cc;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+  }
+  #day-night-indicator {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: 10px auto;
+    background: linear-gradient(to right, #FDB813, #1E90FF);
+    transition: transform 10s linear;
+  }
+  .phytoplankton {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: #00ff00;
+    border-radius: 50%;
+    transition: all 0.5s ease;
+  }
+  .predator {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #ff0000;
+    border-radius: 50%;
+    transition: all 0.5s ease;
+  }
+  #controls {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+  }
+  input[type="range"] {
+    width: 180px;
+    margin: 10px 0;
+  }
+  #stats {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 1.2em;
+  }
+  #species-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  .species-card {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    width: 30%;
+    text-align: center;
+  }
+  .species-indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+  #tutorial-btn {
+    background-color: #00ffff;
+    color: #003366;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 20px;
+  }
+  #tutorial-modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+  }
+  .modal-content {
+    background-color: #003366;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+  }
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div id="game-container">
+    <h1>Evolution of Phytoplankton: Advanced Ecosystem</h1>
+    <div id="ocean"></div>
+    <div id="day-night-indicator"></div>
+    <div id="controls">
+      <div class="control-group">
+        <label for="temperature">Water Temperature</label>
+        <input type="range" id="temperature" min="0" max="100" value="50">
+        <span id="temperature-value">50°C</span>
+      </div>
+      <div class="control-group">
+        <label for="pollution">Pollution Level</label>
+        <input type="range" id="pollution" min="0" max="100" value="20">
+        <span id="pollution-value">20%</span>
+      </div>
+      <div class="control-group">
+        <label for="sunlight">Sunlight</label>
+        <input type="range" id="sunlight" min="0" max="100" value="80">
+        <span id="sunlight-value">80%</span>
+      </div>
+      <div class="control-group">
+        <label for="nutrients">Nutrient Level</label>
+        <input type="range" id="nutrients" min="0" max="100" value="60">
+        <span id="nutrients-value">60%</span>
+      </div>
+      <div class="control-group">
+        <label for="ph">pH Level</label>
+        <input type="range" id="ph" min="0" max="14" value="7" step="0.1">
+        <span id="ph-value">7.0</span>
+      </div>
+    </div>
+    <div id="stats">
+      <p>Total Population: <span id="population">0</span></p>
+      <canvas id="population-chart" width="400" height="200"></canvas>
+    </div>
+    <div id="species-container">
+      <div class="species-card">
+        <div class="species-indicator" style="background-color: #00ff00;"></div>
+        <h3>Chlorella</h3>
+        <p>Population: <span id="chlorella-population">0</span></p>
+      </div>
+      <div class="species-card">
+        <div class="species-indicator" style="background-color: #ff00ff;"></div>
+        <h3>Diatom</h3>
+        <p>Population: <span id="diatom-population">0</span></p>
+      </div>
+      <div class="species-card">
+        <div class="species-indicator" style="background-color: #ffff00;"></div>
+        <h3>Cyanobacteria</h3>
+        <p>Population: <span id="cyanobacteria-population">0</span></p>
+      </div>
+      <div class="species-card">
+        <div class="species-indicator" style="background-color: #ff8c00;"></div>
+        <h3>Dinoflagellate</h3>
+        <p>Population: <span id="dinoflagellate-population">0</span></p>
+      </div>
+    </div>
+    <button id="tutorial-btn">How to Play</button>
+  </div>
+
+  <div id="tutorial-modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>How to Play: Evolution of Phytoplankton</h2>
+      <p>Welcome to the advanced phytoplankton ecosystem simulator! Your goal is to maintain a balanced ecosystem by adjusting environmental factors:</p>
+      <ul>
+        <li><strong>Water Temperature:</strong> Affects overall growth rates. Each species has an optimal temperature range.</li>
+        <li><strong>Pollution Level:</strong> Higher pollution negatively impacts all species, but some are more resilient.</li>
+        <li><strong>Sunlight:</strong> Essential for photosynthesis. Different species have varying light requirements.</li>
+        <li><strong>Nutrient Level:</strong> Represents available resources. Some species thrive in nutrient-rich environments, while others are adapted to scarcity.</li>
+        <li><strong>pH Level:</strong> Influences the survivability of species based on their tolerance.</li>
+      </ul>
+      <p>Observe how different combinations of these factors affect the population of each phytoplankton species. Try to create conditions where all species can coexist!</p>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+  <script>
+    let chart;
+    let predators = [];
+    let isDaytime = true;
+    let dayNightCycle;
+
+    const species = {
+      chlorella: { color: '#00ff00', optimalTemp: 50, pollutionResistance: 0.5, lightRequirement: 0.7, nutrientRequirement: 0.6 },
+      diatom: { color: '#ff00ff', optimalTemp: 30, pollutionResistance: 0.7, lightRequirement: 0.5, nutrientRequirement: 0.8 },
+      cyanobacteria: { color: '#ffff00', optimalTemp: 70, pollutionResistance: 0.8, lightRequirement: 0.9, nutrientRequirement: 0.3 },
+      dinoflagellate: { color: '#ff8c00', optimalTemp: 60, pollutionResistance: 0.6, lightRequirement: 0.6, nutrientRequirement: 0.7 }
+    };
+
+    function initChart() {
+      const ctx = document.getElementById('population-chart').getContext('2d');
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [
+            { label: 'Chlorella', data: [], borderColor: '#00ff00', fill: false },
+            { label: 'Diatom', data: [], borderColor: '#ff00ff', fill: false },
+            { label: 'Cyanobacteria', data: [], borderColor: '#ffff00', fill: false },
+            { label: 'Dinoflagellate', data: [], borderColor: '#ff8c00', fill: false }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            x: { title: { display: true, text: 'Time' } },
+            y: { title: { display: true, text: 'Population' } }
+          }
+        }
+      });
+    }
+
+    const ocean = document.getElementById('ocean');
+    const populationDisplay = document.getElementById('population');
+    const temperatureSlider = document.getElementById('temperature');
+    const pollutionSlider = document.getElementById('pollution');
+    const sunlightSlider = document.getElementById('sunlight');
+    const nutrientsSlider = document.getElementById('nutrients');
+    const phSlider = document.getElementById('ph');
+    const temperatureValue = document.getElementById('temperature-value');
+    const pollutionValue = document.getElementById('pollution-value');
+    const sunlightValue = document.getElementById('sunlight-value');
+    const nutrientsValue = document.getElementById('nutrients-value');
+    const phValue = document.getElementById('ph-value');
+    const chlorellaPopDisplay = document.getElementById('chlorella-population');
+    const diatomPopDisplay = document.getElementById('diatom-population');
+    const cyanobacteriaPopDisplay = document.getElementById('cyanobacteria-population');
+    const dinoflagellatePopDisplay = document.getElementById('dinoflagellate-population');
+    let phytoplanktonPopulation = [];
+    const maxPopulation = 300;
+    let gameLoop;
+
+    function createPhytoplankton(speciesType) {
+      const phytoplankton = document.createElement('div');
+      phytoplankton.className = 'phytoplankton';
+      phytoplankton.style.left = `${Math.random() * 100}%`;
+      phytoplankton.style.top = `${Math.random() * 100}%`;
+      phytoplankton.style.backgroundColor = species[speciesType].color;
+      phytoplankton.dataset.species = speciesType;
+      ocean.appendChild(phytoplankton);
+      return phytoplankton;
+    }
+
+    function createPredator() {
+      const predator = document.createElement('div');
+      predator.className = 'predator';
+      predator.style.left = `${Math.random() * 100}%`;
+      predator.style.top = `${Math.random() * 100}%`;
+      ocean.appendChild(predator);
+      predators.push(predator);
+      animatePredator(predator);
+    }
+
+    function animatePredator(predator) {
+      gsap.to(predator, {
+        x: Math.random() * 400 - 200,
+        y: Math.random() * 400 - 200,
+        duration: 5,
+        ease: "power1.inOut",
+        repeat: -1,
+        yoyo: true
+      });
+    }
+
+    function toggleDayNight() {
+      isDaytime = !isDaytime;
+      const indicator = document.getElementById('day-night-indicator');
+      indicator.style.transform = isDaytime ? 'rotate(0deg)' : 'rotate(180deg)';
+      ocean.style.filter = `brightness(${isDaytime ? sunlightSlider.value : sunlightSlider.value / 2}%) sepia(${pollutionSlider.value}%)`;
+    }
+
+    function startDayNightCycle() {
+      dayNightCycle = setInterval(toggleDayNight, 10000); // 10 seconds per cycle
+    }
+
+    function updateEnvironment() {
+      const temperature = temperatureSlider.value;
+      const pollution = pollutionSlider.value;
+      const sunlight = sunlightSlider.value;
+      const nutrients = nutrientsSlider.value;
+      const ph = phSlider.value;
+
+      temperatureValue.textContent = `${temperature}°C`;
+      pollutionValue.textContent = `${pollution}%`;
+      sunlightValue.textContent = `${sunlight}%`;
+      nutrientsValue.textContent = `${nutrients}%`;
+      phValue.textContent = ph;
+
+      ocean.style.filter = `brightness(${sunlight}%) sepia(${pollution}%)`;
+      ocean.style.backgroundColor = `hsl(210, ${100 - pollution}%, ${30 + temperature / 2}%)`;
+
+      Object.keys(species).forEach(speciesType => {
+        const phTolerance = Math.abs(7 - ph) / 7;
+        species[speciesType].phFactor = 1 - phTolerance;
+      });
+    }
+
+    function calculateGrowthRate(speciesType, temperature, pollution, sunlight, nutrients) {
+      const tempFactor = 1 - Math.abs(temperature - species[speciesType].optimalTemp) / 100;
+      const pollutionFactor = 1 - (pollution / 100) * (1 - species[speciesType].pollutionResistance);
+      const sunlightFactor = Math.min(sunlight / 100, species[speciesType].lightRequirement);
+      const nutrientFactor = Math.min(nutrients / 100, species[speciesType].nutrientRequirement);
+      const phFactor = species[speciesType].phFactor;
+
+      return tempFactor * pollutionFactor * sunlightFactor * nutrientFactor * phFactor;
+    }
+
+    function updatePopulation() {
+      const temperature = temperatureSlider.value;
+      const pollution = pollutionSlider.value;
+      const sunlight = sunlightSlider.value;
+      const nutrients = nutrientsSlider.value;
+
+      let speciesCounts = { chlorella: 0, diatom: 0, cyanobacteria: 0, dinoflagellate: 0 };
+
+      Object.keys(species).forEach(speciesType => {
+        const growthRate = calculateGrowthRate(speciesType, temperature, pollution, sunlight, nutrients);
+        const targetPopulation = Math.floor(maxPopulation / 4 * growthRate);
+
+        const currentPopulation = phytoplanktonPopulation.filter(p => p.dataset.species === speciesType).length;
+
+        if (currentPopulation < targetPopulation) {
+          for (let i = 0; i < targetPopulation - currentPopulation; i++) {
+            phytoplanktonPopulation.push(createPhytoplankton(speciesType));
+          }
+        } else if (currentPopulation > targetPopulation) {
+          const toRemove = currentPopulation - targetPopulation;
+          for (let i = 0; i < toRemove; i++) {
+            const index = phytoplanktonPopulation.findIndex(p => p.dataset.species === speciesType);
+            if (index !== -1) {
+              ocean.removeChild(phytoplanktonPopulation[index]);
+              phytoplanktonPopulation.splice(index, 1);
+            }
+          }
+        }
+
+        speciesCounts[speciesType] = phytoplanktonPopulation.filter(p => p.dataset.species === speciesType).length;
+      });
+
+      populationDisplay.textContent = phytoplanktonPopulation.length;
+      chlorellaPopDisplay.textContent = speciesCounts.chlorella;
+      diatomPopDisplay.textContent = speciesCounts.diatom;
+      cyanobacteriaPopDisplay.textContent = speciesCounts.cyanobacteria;
+      dinoflagellatePopDisplay.textContent = speciesCounts.dinoflagellate;
+
+      updateChart(speciesCounts);
+      updatePredators();
+    }
+
+    function updatePredators() {
+      if (predators.length < 5) {
+        createPredator();
+      }
+      predators.forEach(predator => {
+        const nearbyPhytoplankton = phytoplanktonPopulation.filter(p => 
+          Math.abs(p.offsetLeft - predator.offsetLeft) < 50 &&
+          Math.abs(p.offsetTop - predator.offsetTop) < 50
+        );
+        if (nearbyPhytoplankton.length > 0) {
+          const eaten = nearbyPhytoplankton[Math.floor(Math.random() * nearbyPhytoplankton.length)];
+          ocean.removeChild(eaten);
+          phytoplanktonPopulation = phytoplanktonPopulation.filter(p => p !== eaten);
+        }
+      });
+    }
+
+    function updateChart(speciesCounts) {
+      if (!chart) return;
+
+      chart.data.labels.push(chart.data.labels.length);
+      chart.data.datasets[0].data.push(speciesCounts.chlorella);
+      chart.data.datasets[1].data.push(speciesCounts.diatom);
+      chart.data.datasets[2].data.push(speciesCounts.cyanobacteria);
+      chart.data.datasets[3].data.push(speciesCounts.dinoflagellate);
+      if (chart.data.labels.length > 20) {
+        chart.data.labels.shift();
+        chart.data.datasets.forEach(dataset => dataset.data.shift());
+      }
+      chart.update();
+    }
+
+    function animatePhytoplankton() {
+      phytoplanktonPopulation.forEach(phytoplankton => {
+        gsap.to(phytoplankton, {
+          x: Math.random() * 20 - 10,
+          y: Math.random() * 20 - 10,
+          duration: 3,
+          ease: "sine.inOut",
+          repeat: -1,
+          yoyo: true
+        });
+      });
+    }
+
+    function startGame() {
+      updateEnvironment();
+      initChart();
+      updatePopulation();
+      animatePhytoplankton();
+      startDayNightCycle();
+
+      gameLoop = setInterval(() => {
+        updateEnvironment();
+        updatePopulation();
+      }, 1000);
+    }
+
+    temperatureSlider.addEventListener('input', updateEnvironment);
+    pollutionSlider.addEventListener('input', updateEnvironment);
+    sunlightSlider.addEventListener('input', updateEnvironment);
+    nutrientsSlider.addEventListener('input', updateEnvironment);
+    phSlider.addEventListener('input', updateEnvironment);
+
+    const modal = document.getElementById("tutorial-modal");
+    const btn = document.getElementById("tutorial-btn");
+    const span = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    startGame();
+  </script>
+</body>
+</html>
